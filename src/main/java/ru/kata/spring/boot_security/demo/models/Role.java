@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.entities;
+package ru.kata.spring.boot_security.demo.models;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,6 +11,7 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    @Column(name = "roles_name")
     private String role;
 
     public String getRole() {
