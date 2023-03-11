@@ -1,15 +1,19 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails  {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(name = "username")
     private String name;
@@ -24,7 +28,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
             )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
     public User(String name, String surname, String password) {
         this.name = name;
         this.surname = surname;
@@ -55,37 +59,27 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
-/*    public static UserDetails detailsUser(User user) {
-        return new org.springframework.security.core.userdetails.User(user.name, user.password, user.getAuthorities());
-    }*/
 
-/*
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    public String getSurname() {
+        return this.surname;
     }
 
     @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
     public String getPassword() {
         return this.password;
     }
@@ -114,8 +108,6 @@ public class User {
     public boolean isEnabled() {
         return true;
     }
-*/
-
 
     @Override
     public boolean equals(Object o) {
