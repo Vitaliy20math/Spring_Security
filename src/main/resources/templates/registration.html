@@ -10,19 +10,19 @@
   <form:form method="POST" modelAttribute="userForm">
     <h2>Регистрация</h2>
     <div>
-      <form:input type="text" path="username" placeholder="Username"
+      <form:input type="text" path="username" placeholder="username"
                   autofocus="true"></form:input>
       <form:errors path="username"></form:errors>
       ${usernameError}
     </div>
     <div>
-      <form:input type="text" path="surname" placeholder="Surname"
+      <form:input type="text" path="surname" placeholder="surname"
                   autofocus="true"></form:input>
       <form:errors path="surname"></form:errors>
       ${surnameError}
     </div>
     <div>
-      <form:input type="password" path="password" placeholder="Password"></form:input>
+      <form:input type="password" path="password" placeholder="password"></form:input>
       <form:errors path="password"></form:errors>
       ${passwordError}
     </div>

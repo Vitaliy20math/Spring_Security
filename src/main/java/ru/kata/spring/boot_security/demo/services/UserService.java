@@ -2,10 +2,10 @@ package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.Dao.RoleDao;
 import ru.kata.spring.boot_security.demo.Dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -20,28 +20,19 @@ import java.util.Optional;
 
 
 @Service
-public class UserService implements UserDetailsService {
-    private UserDao userDao;
+public class UserService implements UserDetailsServiceImpl {
+    private final UserDao userDao;
 
-    private RoleDao roleDao;
-
-    @PersistenceContext
-    private EntityManager em;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public void setUserDao(UserDao userRep) {
-        this.userDao = userRep;
-    }
-    @Autowired
-    public void setRoleDao(RoleDao roleRep) {
-        this.roleDao = roleRep;
-    }
-    @Autowired
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserDao userDao, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userDao = userDao;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
@@ -49,9 +40,10 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' is not found!", username));
         }
-        return user;
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
 
     }
+
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userDao.findById(userId);
         return userFromDb.orElse(new User());
@@ -60,7 +52,7 @@ public class UserService implements UserDetailsService {
     public List<User> allUsers() {
         return userDao.findAll();
     }
-
+    @Transactional
     public boolean saveUser(User user) {
         User userFromDB = userDao.findByUsername(user.getUsername());
 
@@ -73,7 +65,7 @@ public class UserService implements UserDetailsService {
         userDao.save(user);
         return true;
     }
-
+    @Transactional
     public boolean deleteUser(Long userId) {
         if (userDao.findById(userId).isPresent()) {
             userDao.deleteById(userId);
@@ -82,8 +74,14 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public List<User> usergetList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
+    public List<User> usergetList() {
+       /* return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
+                .setParameter("paramId", idMin).getResultList();*/
+        return userDao.findAll();
+    }
+
+    public void update(User user) {
+        User oldUser = findUserById((long) user.getId());
+        oldUser = user;
     }
 }
