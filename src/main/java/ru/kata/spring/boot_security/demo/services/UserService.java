@@ -23,7 +23,6 @@ import java.util.Optional;
 public class UserService implements UserDetailsServiceImpl {
     private final UserDao userDao;
 
-
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -43,24 +42,20 @@ public class UserService implements UserDetailsServiceImpl {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
 
     }
-
+    @Transactional
     public User findUserById(Long userId) {
-        Optional<User> userFromDb = userDao.findById(userId);
-        return userFromDb.orElse(new User());
+        return userDao.findById(userId).get();
     }
-
+    @Transactional
     public List<User> allUsers() {
         return userDao.findAll();
     }
     @Transactional
     public boolean saveUser(User user) {
         User userFromDB = userDao.findByUsername(user.getUsername());
-
         if (userFromDB != null) {
             return false;
         }
-
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDao.save(user);
         return true;
@@ -73,15 +68,9 @@ public class UserService implements UserDetailsServiceImpl {
         }
         return false;
     }
-
-    public List<User> usergetList() {
-       /* return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();*/
-        return userDao.findAll();
-    }
-
+    @Transactional
     public void update(User user) {
-        User oldUser = findUserById((long) user.getId());
-        oldUser = user;
+        //user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userDao.save(user);
     }
 }

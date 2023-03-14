@@ -18,6 +18,5 @@ public interface UserDetailsServiceImpl extends UserDetailsService {
 
     void update(User user);
 
-    List<User> usergetList();
 
 }
