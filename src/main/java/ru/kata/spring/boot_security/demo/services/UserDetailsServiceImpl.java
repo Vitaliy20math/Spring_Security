@@ -16,7 +16,7 @@ public interface UserDetailsServiceImpl extends UserDetailsService {
 
     boolean deleteUser(Long userId);
 
-    void update(User user);
+    void update(User user, Long id);
 
 
 }

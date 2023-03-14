@@ -68,9 +68,20 @@ public class UserService implements UserDetailsServiceImpl {
         }
         return false;
     }
-    @Transactional
-    public void update(User user) {
+    /*@Transactional
+    public void update(User user, Long id) {
         //user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userDao.save(user);
+        userDao.findById(id)
+    }
+*/
+    @Transactional
+    public void update(User user, Long id) {
+        User userFromDb = userDao.findById(id).get();
+        if (userFromDb.getPassword().equals(user.getPassword())) {
+            userDao.save(user);
+        } else {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userDao.save(user);
+        }
     }
 }
