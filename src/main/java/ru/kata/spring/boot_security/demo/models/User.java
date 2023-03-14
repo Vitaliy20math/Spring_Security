@@ -135,7 +135,8 @@ public class User implements UserDetails  {
         return Objects.hash(id, username, surname, password, roles);
     }
 
-    public String getName() {
+    public String getName() {//реализован в связи с ошибкой
+        //Exception processing template listUsers: Exception evaluating SpringEL expression: user.getName() (template: listUsers - line 28, col 9)
         return getUsername();
     }
 
