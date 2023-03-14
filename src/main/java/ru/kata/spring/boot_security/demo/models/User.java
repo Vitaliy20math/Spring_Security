@@ -74,13 +74,10 @@ public class User implements UserDetails  {
         this.id = id;
     }
 
-    public String getName() {
-        return this.username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setName(String name) {
-        this.username = name;
-    }
     public void setSurname(String surname) {
         this.surname = surname;
     }
@@ -88,7 +85,7 @@ public class User implements UserDetails  {
 
 
     public String getSurname() {
-        return this.surname;
+        return surname;
     }
 
     @Override
@@ -97,12 +94,12 @@ public class User implements UserDetails  {
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     @Override
@@ -136,6 +133,10 @@ public class User implements UserDetails  {
     @Override
     public int hashCode() {
         return Objects.hash(id, username, surname, password, roles);
+    }
+
+    public String getName() {
+        return getUsername();
     }
 
     @Override
