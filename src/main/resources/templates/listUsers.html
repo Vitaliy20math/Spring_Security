@@ -17,7 +17,7 @@
    <th>Name</th>
     <th>Surname</th>
     <th>Roles</th>
-    <th>Password</th>
+    <!--<th>Password</th>-->
     <th></th>
 </tr>
 </thead>
@@ -28,7 +28,7 @@
     <td th:text="${user.getName()}">Name</td>
    <td th:text="${user.getSurname()}">Surname</td>
     <td th:text="${user.getRoles()}">Roles</td>
-    <td th:text="${user.getPassword()}">Password</td>
+    <!--<td th:text="${user.getPassword()}">Password</td>-->
     <td><form th:action="@{/admin/{id}/edit(id=${user.getId()})}" target="_self">
         <button>Обновить данные</button>
     </form>
