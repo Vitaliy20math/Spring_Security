@@ -41,6 +41,20 @@ public class AdminControllers {
         return "userById";
     }
 
+    @GetMapping("/create")
+    public String createUserFrom(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        List<Role> setRoles = roleService.getRoles();
+        model.addAttribute("list", setRoles);
+        return "create";
+    }
+    @PostMapping("/create")
+    public String createUser(@ModelAttribute("user") User user) {
+        userService.saveUser(user);
+        return "redirect:/admin";
+    }
+
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", userService.findUserById(id));
