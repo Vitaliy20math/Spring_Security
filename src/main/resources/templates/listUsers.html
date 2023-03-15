@@ -31,7 +31,11 @@
     <td th:text="${user.getPassword()}">Password</td>
     <td><form th:action="@{/admin/{id}/edit(id=${user.getId()})}" target="_self">
         <button>Обновить данные</button>
-    </form></td>
+    </form>
+    <hr><form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
+            <input type="submit" value="Удалить пользователя">
+        </form>
+    </td>
 <!--
     <td><a th:href="@{/logout}">Exit</a></td>
 -->
