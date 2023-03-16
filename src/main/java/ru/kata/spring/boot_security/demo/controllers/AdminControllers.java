@@ -8,25 +8,21 @@ import ru.kata.spring.boot_security.demo.Dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleServiceImpl;
-import ru.kata.spring.boot_security.demo.services.UserDetailsServiceImpl;
-
-import java.security.Principal;
+import ru.kata.spring.boot_security.demo.services.UserService;
 import java.util.List;
 
 
 @Controller
 @RequestMapping("/admin")
 public class AdminControllers {
-    private final UserDetailsServiceImpl userService;
+    private final UserService userService;
 
     private final RoleServiceImpl roleService;
 
-    private final UserDao userDao;
     @Autowired
-    public AdminControllers(UserDetailsServiceImpl userService, RoleServiceImpl roleService, UserDao userDao) {
+    public AdminControllers(UserService userService, RoleServiceImpl roleService, UserDao userDao) {
         this.userService = userService;
         this.roleService = roleService;
-        this.userDao = userDao;
     }
 
     @GetMapping()

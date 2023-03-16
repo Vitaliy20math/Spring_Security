@@ -3,39 +3,37 @@ package ru.kata.spring.boot_security.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.kata.spring.boot_security.demo.Dao.RoleDao;
-import ru.kata.spring.boot_security.demo.models.Role;
-import ru.kata.spring.boot_security.demo.services.UserDetailsServiceImpl;
+import ru.kata.spring.boot_security.demo.services.UserService;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
     private final SuccessUserHandler successUserHandler;
 
     private RoleDao roleDao;
 
-    private UserDetailsServiceImpl userDetailsService;
+    private UserService userDetailsService;
+
+    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+        this.successUserHandler = successUserHandler;
+    }
     @Autowired
-    public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
+    public void setUserDetailsService(UserService userDetailsService) {
         this.userDetailsService = userDetailsService;
+    }
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
     @Autowired
     public void setRoleDao(RoleDao roleDao) {
         this.roleDao = roleDao;
-    }
-
-
-    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-        this.successUserHandler = successUserHandler;
     }
 
     @Override
@@ -44,8 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/", "/index").permitAll()
-                 //.antMatchers("/test/**").authenticated()
+                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin().successHandler(successUserHandler)
                 .permitAll()
@@ -53,13 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll();
     }
-   /* @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        return daoAuthenticationProvider;
-    }*/
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());

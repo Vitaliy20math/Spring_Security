@@ -18,9 +18,6 @@ public class Role implements GrantedAuthority {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     private Set<User> users;
 
-    /*public Set<User> getUsers(){
-        return users;
-    }*/
     public Role(Long id) {
         this.id = id;
     }
@@ -50,14 +47,6 @@ public class Role implements GrantedAuthority {
     public Role(String role) {
         this.role = role;
     }
-
-/*    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }*/
 
     @Override
     public boolean equals(Object o) {

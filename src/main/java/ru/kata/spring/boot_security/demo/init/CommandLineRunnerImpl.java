@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.testDir;
+package ru.kata.spring.boot_security.demo.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -8,9 +8,7 @@ import ru.kata.spring.boot_security.demo.Dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 @Component
 public class CommandLineRunnerImpl implements CommandLineRunner {
