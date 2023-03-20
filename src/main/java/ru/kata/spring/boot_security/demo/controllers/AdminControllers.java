@@ -20,7 +20,7 @@ public class AdminControllers {
     private final RoleServiceImpl roleService;
 
     @Autowired
-    public AdminControllers(UserService userService, RoleServiceImpl roleService, UserDao userDao) {
+    public AdminControllers(UserService userService, RoleServiceImpl roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
